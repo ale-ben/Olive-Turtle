@@ -1218,7 +1218,7 @@
   (symbol (lib_id "IRF520:IRF520") (at 74.93 78.74 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ad7bc779-095b-42e0-bc2a-41acd3014704)
-    (property "Reference" "L1-T2" (at 67.31 79.158 0)
+    (property "Reference" "L1-T1" (at 67.31 79.158 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "IRF520" (at 67.31 76.618 0)
@@ -1236,7 +1236,7 @@
     (instances
       (project "Olive-Turtle"
         (path "/51055cea-6c3b-4d6e-9886-de884be04eed"
-          (reference "L1-T2") (unit 1)
+          (reference "L1-T1") (unit 1)
         )
       )
     )
@@ -1492,7 +1492,7 @@
   (symbol (lib_id "IRF520:IRF520") (at 40.64 96.52 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid efb57374-dff6-4f9e-926d-372172a86ebb)
-    (property "Reference" "L1-T1" (at 33.02 96.938 0)
+    (property "Reference" "L2-T1" (at 33.02 96.938 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "IRF520" (at 33.02 94.398 0)
@@ -1510,7 +1510,7 @@
     (instances
       (project "Olive-Turtle"
         (path "/51055cea-6c3b-4d6e-9886-de884be04eed"
-          (reference "L1-T1") (unit 1)
+          (reference "L2-T1") (unit 1)
         )
       )
     )
