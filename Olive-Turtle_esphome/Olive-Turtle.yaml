@@ -1,0 +1,32 @@
+esphome:
+  name: ledcontrol-camera-ale
+  friendly_name: LedControl Camera Ale
+  platformio_options:
+    upload_speed: 230400
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "CwFrFvl39XhPbZR+dL6O57Wf8FbnhB+RLFuCuthW20o="
+
+ota:
+  password: "d5c40d5d53af2a826f858cb96764f255"
+
+wifi:
+  ssid: "Sant'Artemio 16/C"
+  password: "Magicoale_1234"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ledcontrol-Camera-Ale"
+    password: "1amEx0udo6rj"
+
+captive_portal:
