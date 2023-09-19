@@ -21,8 +21,8 @@ ota:
   password: "d5c40d5d53af2a826f858cb96764f255"
 
 wifi:
-  ssid: "Sant'Artemio 16/C"
-  password: "Magicoale_1234"
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -30,3 +30,4 @@ wifi:
     password: "1amEx0udo6rj"
 
 captive_portal:
+    
