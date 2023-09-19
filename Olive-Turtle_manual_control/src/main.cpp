@@ -13,7 +13,7 @@
 #define SCL_PIN 22
 
 // LED PWM SETTINGS
-#define LED_PIN 35
+#define LED_PIN 32
 #define LED_CHANNEL 0
 #define LED_RESOLUTION 8
 #define LED_FREQUENCY 5000
