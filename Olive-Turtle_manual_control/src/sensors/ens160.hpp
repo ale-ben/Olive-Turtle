@@ -1,3 +1,14 @@
+/**
+ * @file ens160.hpp
+ * @author Benetton Alessandro (aleben98@gmail.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-09-19
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef ENS160_HPP
 #define ENS160_HPP
 #include <Arduino.h>
@@ -74,4 +85,9 @@ uint16_t ens160GetTVOC();
  */
 uint16_t ens160GetECO2();
 
+/**
+ * @brief Prints the last read data to the serial port
+ *
+ */
+void ens160PrintData();
 #endif

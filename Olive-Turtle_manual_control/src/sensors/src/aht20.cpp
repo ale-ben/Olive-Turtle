@@ -1,3 +1,14 @@
+/**
+ * @file aht20.cpp
+ * @author Benetton Alessandro (aleben98@gmail.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-09-19
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include <Arduino.h>
 #include <AHT20.h>
 
@@ -84,5 +95,12 @@ float aht20GetHumidity(){
 	return aht20.getHumidity();
 	#else
 	return -1.1;
+	#endif
+}
+
+void aht20PrintData() {
+	#ifndef DISABLE_AHT20
+	logInfo(MODULE_NAME, "Temperature (°C): ", aht20GetTemperature());
+	logInfo(MODULE_NAME, "Humidity (%RH): ", aht20GetHumidity());
 	#endif
 }

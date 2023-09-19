@@ -1,3 +1,14 @@
+/**
+ * @file ens160.cpp
+ * @author Benetton Alessandro (aleben98@gmail.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-09-19
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include <Arduino.h>
 
 #include "../ens160.hpp"
@@ -133,5 +144,14 @@ uint16_t ens160GetECO2(){
 	return ENS160.getECO2();
 	#else
 	return 0;
+	#endif
+}
+
+void ens160PrintData() {
+	#ifndef DISABLE_ENS160
+	logInfo(MODULE_NAME, "Status:", ens160GetStatus());
+	logInfo(MODULE_NAME, "AQI (1-5):", ens160GetAQI());
+	logInfo(MODULE_NAME, "TVOC (ppb):", ens160GetTVOC());
+	logInfo(MODULE_NAME, "eCO2:", ens160GetECO2());
 	#endif
 }

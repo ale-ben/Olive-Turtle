@@ -1,7 +1,6 @@
 /**
  * @file bmp280.hpp
  * @author Alessandro Benetton (aleben98@gmail.com)
- * @author Crespan Lorenzo (lorenzo.crespan@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-05-07
@@ -34,4 +33,10 @@ float bmp280ReadTemperature();
  * @return float The pressure in hPa.
  */
 float bmp280ReadPressure();
+
+/**
+ * @brief Prints the last read data to the serial port.
+ *
+ */
+void bmp280PrintData();
 #endif

@@ -1,7 +1,6 @@
 /**
  * @file bmp280.cpp
  * @author Alessandro Benetton (aleben98@gmail.com)
- * @author Crespan Lorenzo (lorenzo.crespan@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-05-07
@@ -93,5 +92,13 @@ float bmp280ReadPressure() {
 	else return -1.1;
 	#else
 	return -1.1;
+	#endif
+}
+
+
+void bmp280PrintData() {
+	#ifndef DISABLE_BMP280
+	logInfo(MODULE_NAME, "Temperature (°C):", bmp280ReadTemperature() );
+	logInfo(MODULE_NAME, "Pressure (hPa):", bmp280ReadPressure());
 	#endif
 }

@@ -13,7 +13,7 @@
 #define SCL_PIN 22
 
 // LED PWM SETTINGS
-#define LED_PIN 23
+#define LED_PIN 35
 #define LED_CHANNEL 0
 #define LED_RESOLUTION 8
 #define LED_FREQUENCY 5000
@@ -47,7 +47,7 @@ void setup()
 // Main loop
 #define MAX_IN_CHARS 10
 char in_chars[MAX_IN_CHARS];
-	int i = 0;
+int i = 0;
 
 #define HELP "Available commands:\n\
 	- help: print this message\n\
@@ -91,13 +91,17 @@ void loop(){
 		} else if (strstr(in_chars, "led")) {
 			Serial.printf("Led brightness: %d\n", getLedPWM());
 		} else if (strstr(in_chars, "aht")) {
-			Serial.println("Printing AHT20 data");
+			aht20PrintData();
 		} else if (strstr(in_chars, "ens")) {
-			Serial.println("Printing ENS160 data");
+			ens160PrintData();
 		} else if (strstr(in_chars, "bmp")) {
-			Serial.println("Printing BMP280 data");
+			bmp280PrintData();
 		} else if (strstr(in_chars, "all")) {
 			Serial.println("Printing all data");
+			Serial.printf("Led brightness: %d\n", getLedPWM());
+			aht20PrintData();
+			ens160PrintData();
+			bmp280PrintData();
 		} else if (strstr(in_chars, "help")) {
 			Serial.println(HELP);
 		} else {
