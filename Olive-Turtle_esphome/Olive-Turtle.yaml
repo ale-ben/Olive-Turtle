@@ -57,7 +57,7 @@ light:
 sensor:
   - platform: bmp280
     temperature:
-      name: "Temperatura"
+      name: "Temperature"
     pressure:
       name: "Pressure"
     address: 0x76
@@ -85,9 +85,11 @@ sensor:
       device_class: "carbon_dioxide"
     - name: "TVOC"
       device_class: "VOLATILE_ORGANIC_COMPOUNDS_PARTS"
+      unit_of_measurement: "ppb"
     - name: "Status"
       entity_category: "diagnostic"
     - name: "AHTTemperature"
       device_class: "temperature"
     - name: "Humidity"
       device_class: "humidity"
+      unit_of_measurement: "%"
