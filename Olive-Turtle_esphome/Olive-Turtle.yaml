@@ -31,3 +31,43 @@ wifi:
 
 captive_portal:
     
+# Example configuration entry for ESP32
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+
+output:
+  - platform: ledc
+    pin: 32
+    id: LED_PIN
+
+light:
+  - platform: monochromatic
+    output: LED_PIN
+    name: "Led 1 scrivania"
+
+sensor:
+  - platform: bmp280
+    temperature:
+      name: "Temperatura"
+    pressure:
+      name: "Pressure"
+    address: 0x76
+  - platform: aht10
+    temperature:
+      name: "AHTTemperature"
+    humidity:
+      name: "AHTPressure"
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+  - platform: copy # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Percent"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "Signal %"
+    entity_category: "diagnostic"
