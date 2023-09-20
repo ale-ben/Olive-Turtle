@@ -3,6 +3,13 @@ esphome:
   friendly_name: LedControl Camera Ale
   platformio_options:
     upload_speed: 230400
+  includes:
+    - "CustomComponents/Sensors/ens160.h"
+  libraries:
+    - SPI
+    - Wire
+    - "dfrobot/DFRobot_ENS160@^1.0.1"
+    - "dvarrel/AHT20@^1.0.0"
 
 esp32:
   board: esp32dev
@@ -54,11 +61,6 @@ sensor:
     pressure:
       name: "Pressure"
     address: 0x76
-  - platform: aht10
-    temperature:
-      name: "AHTTemperature"
-    humidity:
-      name: "AHTPressure"
   - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
     name: "WiFi Signal dB"
     id: wifi_signal_db
@@ -71,3 +73,21 @@ sensor:
       - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
     unit_of_measurement: "Signal %"
     entity_category: "diagnostic"
+  - platform: custom
+    lambda: |-
+      auto ens160Sensor = new ENS160Sensor();
+      App.register_component(ens160Sensor);
+      return {ens160Sensor->aqi_sensor, ens160Sensor->eco2_sensor, ens160Sensor->tvoc_sensor, ens160Sensor->status_sensor, ens160Sensor->temp_sensor, ens160Sensor->hum_sensor};
+    sensors:
+    - name: "AQI"
+      device_class: "aqi"
+    - name: "eCO2"
+      device_class: "carbon_dioxide"
+    - name: "TVOC"
+      device_class: "VOLATILE_ORGANIC_COMPOUNDS_PARTS"
+    - name: "Status"
+      entity_category: "diagnostic"
+    - name: "AHTTemperature"
+      device_class: "temperature"
+    - name: "Humidity"
+      device_class: "humidity"
