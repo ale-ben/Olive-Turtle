@@ -15,49 +15,49 @@
 #include "../../utilities/loggerLib.hpp"
 
 #define MODULE_NAME "ENS160"
-#define ENS160_ADDRESS 0x53
 
-// Notify ENS error only once
-bool ensErrorNotified = false;
+SparkFun_ENS160 myENS;
 
-DFRobot_ENS160_I2C ENS160(&Wire, /*I2CAddr*/ ENS160_ADDRESS);
+bool printedCompensation = false;
 
-bool ens160Setup(float ambientTemp, float ambientHum, uint8_t mode) {
+bool ens160Setup(float ambientTemp, float ambientHum) {
 	logDebug(MODULE_NAME,"Begin setup");
 
 	#ifndef DISABLE_ENS160
 	// Init the sensor
-	int i = 0;
-	while (NO_ERR != ENS160.begin() && i++ < 10) {
-		logWarning(MODULE_NAME,"Communication with device failed, retrying in 3 seconds");
-		delay(3000);
-	}
-
-	if (i == 10) {
-		logError(MODULE_NAME, "Communication with device failed, please check connection");
+	if( !myENS.begin() ) {
+		logError(MODULE_NAME, "Could not communicate with the ENS160, check wiring.");
 		return false;
-	} else {
-		logDebug(MODULE_NAME,"Begin ok!");
 	}
 
-	/**
-	 * Set power mode
-	 * mode Configurable power mode:
-	 *   ENS160_SLEEP_MODE: DEEP SLEEP mode (low power standby)
-	 *   ENS160_IDLE_MODE: IDLE mode (low-power)
-	 *   ENS160_STANDARD_MODE: STANDARD Gas Sensing Modes
-	 */
-	ENS160.setPWRMode(mode);
+	logDebug(MODULE_NAME,"Begin ok!");
 
-	/**
-	 * Users write ambient temperature and relative humidity into ENS160 for
-	 * calibration and compensation of the measured gas data. ambientTemp
-	 * Compensate the current ambient temperature, float type, unit: C
-	 * relativeHumidity Compensate the current ambient temperature, float type,
-	 * unit: %rH
-	 *
-	 */
-	ENS160.setTempAndHum(ambientTemp, ambientHum);
+
+	// Reset the indoor air quality sensor's settings.
+	if( myENS.setOperatingMode(SFE_ENS160_RESET) )
+		Serial.println("Ready.");
+
+	delay(100);
+
+	// Device needs to be set to idle to apply any settings.
+	// myENS.setOperatingMode(SFE_ENS160_IDLE);
+	// Give values to Air Quality Sensor.
+	logDebug(MODULE_NAME, "Setting temp", ambientTemp);
+	logDebug(MODULE_NAME, "Setting hum", ambientHum);
+	myENS.setTempCompensationCelsius(ambientTemp);
+	myENS.setRHCompensationFloat(ambientHum);
+
+	delay(500);
+
+	// Set to standard operation
+	// Others include SFE_ENS160_DEEP_SLEEP and SFE_ENS160_IDLE
+	myENS.setOperatingMode(SFE_ENS160_STANDARD);
+
+	int ensStatus = myENS.getFlags();
+	Serial.print("Gas Sensor Status Flag (0 - Standard, 1 - Warm up, 2 - Initial Start Up): ");
+	Serial.println(ensStatus);
+
+
 	#else
 	logWarning(MODULE_NAME, "ENS160 disabled");
 	#endif
@@ -66,92 +66,39 @@ bool ens160Setup(float ambientTemp, float ambientHum, uint8_t mode) {
 	return true;
 }
 
-void ens160SetPWRMode(uint8_t mode) {
-	logDebug(MODULE_NAME,"Setting power mode:", mode);
-	#ifndef DISABLE_ENS160
-	ENS160.setPWRMode(mode);
-	#endif
-}
-
-void setTempAndHum(float ambientTemp, float relativeHumidity) {
-	logDebug(MODULE_NAME,"Setting temperature:", ambientTemp);
-	logDebug(MODULE_NAME,"Setting humidity:", relativeHumidity);
-	#ifndef DISABLE_ENS160
-	ENS160.setTempAndHum(ambientTemp, relativeHumidity);
-	#endif
-}
-
-/*
-   https://www.arduino.cc/reference/en/language/functions/communication/wire/endtransmission/
-   endTransmission() returns:
-   0: success.
-   1: data too long to fit in transmit buffer.
-   2: received NACK on transmit of address.
-   3: received NACK on transmit of data.
-   4: other error.
-   5: timeout
- */
-bool ens160Ping() {
-	#ifndef DISABLE_ENS160
-	Wire.beginTransmission(ENS160_ADDRESS);
-	byte error = Wire.endTransmission();
-	// No error, nice
-	if (error == 0) {
-		ensErrorNotified = false;
-		return true;
-	}
-
-	// Well... not so good, but could be worse
-	logError(MODULE_NAME, "Sensor not responding, ping returned:", String(error));
-	ensErrorNotified = true;
-	return false;
-	#else
-	return true;
-	#endif
-}
-
-uint8_t ens160GetStatus(){
-	#ifndef DISABLE_ENS160
-	if (!ens160Ping()) return 0;
-	uint8_t status = ENS160.getENS160Status();
-	return status;
-	#else
-	return 0;
-	#endif
-}
-
-uint8_t ens160GetAQI(){
-	#ifndef DISABLE_ENS160
-	if (!ens160Ping()) return 0;
-	return ENS160.getAQI();
-	#else
-	return 0;
-	#endif
-}
-
-uint16_t ens160GetTVOC(){
-	#ifndef DISABLE_ENS160
-	if (!ens160Ping()) return 0;
-	return ENS160.getTVOC();
-	#else
-	return 0;
-	#endif
-}
-
-uint16_t ens160GetECO2(){
-	#ifndef DISABLE_ENS160
-	if (!ens160Ping()) return 0;
-	return ENS160.getECO2();
-	#else
-	return 0;
-	#endif
-}
-
 void ens160PrintData() {
 	#ifndef DISABLE_ENS160
-	logInfo(MODULE_NAME, "Status:", ens160GetStatus());
-	logInfo(MODULE_NAME, "AQI (1-5):", ens160GetAQI());
-	logInfo(MODULE_NAME, "TVOC (ppb):", ens160GetTVOC());
-	logInfo(MODULE_NAME, "eCO2:", ens160GetECO2());
+	if( myENS.checkDataStatus() )   {
+		
+		if (printedCompensation == false) {
+			Serial.println("---------------------------");
+			Serial.print("Compensation Relative Humidity (%): ");
+			Serial.println(myENS.getRH());
+			Serial.println("---------------------------");
+			Serial.print("Compensation Temperature (Celsius): ");
+			Serial.println(myENS.getTempCelsius());
+			Serial.println("---------------------------");
+			printedCompensation = true;
+		}
+		
+		Serial.print("Air Quality Index (1-5) : ");
+		Serial.println(myENS.getAQI());
+
+		Serial.print("Total Volatile Organic Compounds: ");
+		Serial.print(myENS.getTVOC());
+		Serial.println("ppb");
+
+		Serial.print("CO2 concentration: ");
+		Serial.print(myENS.getECO2());
+		Serial.println("ppm");
+
+		Serial.print("Gas Sensor Status Flag (0 - Standard, 1 - Warm up, 2 - Initial Start Up): ");
+		Serial.println(myENS.getFlags());
+
+		Serial.println();
+
+	} else {
+		logInfo(MODULE_NAME, "No data to read");
+	}
 	#endif
 }

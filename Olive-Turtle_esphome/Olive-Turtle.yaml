@@ -8,7 +8,7 @@ esphome:
   libraries:
     - SPI
     - Wire
-    - "dfrobot/DFRobot_ENS160@^1.0.1"
+    - "sparkfun/SparkFun Indoor Air Quality Sensor - ENS160@^1.1.0"
     - "dvarrel/AHT20@^1.0.0"
 
 esp32:
