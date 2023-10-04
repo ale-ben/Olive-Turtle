@@ -10,7 +10,10 @@
 - [4. Installation and wiring](#4-installation-and-wiring)
 	- [4.1. Home Assistant](#41-home-assistant)
 	- [4.2. Microcontroller](#42-microcontroller)
-		- [Wiring](#wiring)
+		- [4.2.1. Wiring](#421-wiring)
+		- [4.2.2. Software](#422-software)
+			- [4.2.2.1. Test Software](#4221-test-software)
+			- [4.2.2.2. ESPHome integration](#4222-esphome-integration)
 
 # 1. Olive-Turtle
 
@@ -73,7 +76,57 @@ ESPHome will generate a configuration file for you and prepare everything for th
 
 ## 4.2. Microcontroller
 
-### Wiring
-This repository provides both a wiring diagram and a proposed implementation for splitting the component across multiple breadboards.
+### 4.2.1. Wiring
+This repository provides both a wiring diagram and a proposed implementation for splitting the component across multiple protoboards.
+
+The `schematics` folder contains the KiCAD project for the wiring diagram and the VeroRoute project for the protoboard implementation. The wiring is consistent between the two projects.
 
 ![Wiring Diagram](schematics/Olive-Turtle_KiCAD/Olive-Turtle.svg)
+
+The wiring diagram is split in three sections, the first one contains the microcontroller and relative connections, the second the sensors and I2C connections to the controller and the third the LED strip and relative connections.
+
+This is the proposed implementation for the protoboard, all sensor identification codes refer to the one used in the KiCAD schematic:
+> Note that all images have a mirrored version, so that you can use them as a reference when soldering the components on the back of the board. This version can be found in the `schematics/Olive-Turtle_VeroRoute/png` folder.
+
+**Main Board**
+
+![Main Board](schematics/Olive-Turtle_VeroRoute/png/Olive-Turtle_mainboard.png)
+
+**Sensor Board**
+
+![Sensor Board](schematics/Olive-Turtle_VeroRoute/png/Olive-Turtle_sensors.png)
+
+**LED Board**
+
+![LED Board](schematics/Olive-Turtle_VeroRoute/png/Olive-Turtle_ledcontrol.png)
+
+### 4.2.2. Software
+
+#### 4.2.2.1. Test Software
+The `Olive-Turtle_manual_control` folder contains a simple test software that can be used to verify that all the components are working correctly.
+
+Make sure to have PlatformIO installed and open the project folder, then using the PlatformIO UI you can compile and upload the code to the board.
+
+This version of the software does not have any WiFi or Home Assistant integration, it simply reads the sensors and allows you to control the LED strip using the serial monitor.
+After setup complete this is the list of available commands:
+- `help`: Print the list of available commands
+- `led <value>`: Set the LED brightness to the specified value (0-255)
+- `led`: Print the current LED brightness
+- `aht` | `bmp` | `ens`: Print the current value of the specified sensor
+- `all`: Print the current value of all the sensors
+
+After verifying that all sensors provide correct values and that the LED strip is working, you can proceed to the next step and configure the board to work with Home Assistant.
+
+> Note that the test software is not required for the next step, it is only provided as a way to verify that all the components are working correctly.
+
+#### 4.2.2.2. ESPHome integration
+
+This is the final step, we will now configure the board to work with Home Assistant.
+
+Open the `Olive-Turtle_esphome` folder, rename (or copy) the secretsTemplate.yaml to secrets.yaml and fill in the required information.
+One of the fields will be `homeassistant_key`, this key can be found in Home Assistant, in the ESPHome tab by clicking on the three dots next to the board name and then on _Show API Key.
+
+Once you have filled in all the required information, you can compile and upload the code to the board with `esphome run Olive-Turtle.yaml`.
+> Note that the first upload MUST be done using a USB cable, after the first upload you can use OTA updates.
+
+If everything went correctly you should see the board as online in Home Assistant. Next go to settings and add the board as a device. The board will be automatically added to the auto generated dashboard and you can now control the LED strip and see the sensor values.
