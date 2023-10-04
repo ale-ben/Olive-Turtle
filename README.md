@@ -76,4 +76,4 @@ ESPHome will generate a configuration file for you and prepare everything for th
 ### Wiring
 This repository provides both a wiring diagram and a proposed implementation for splitting the component across multiple breadboards.
 
-![Wiring Diagram](images/Olive-Turtle.svg)
+![Wiring Diagram](images/Olive-Turtle.png)
