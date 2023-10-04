@@ -14,6 +14,10 @@
 		- [4.2.2. Software](#422-software)
 			- [4.2.2.1. Test Software](#4221-test-software)
 			- [4.2.2.2. ESPHome integration](#4222-esphome-integration)
+- [Usage](#usage)
+	- [Data visualization](#data-visualization)
+	- [Logs](#logs)
+	- [Telegram Bot](#telegram-bot)
 
 # 1. Olive-Turtle
 
@@ -130,3 +134,11 @@ Once you have filled in all the required information, you can compile and upload
 > Note that the first upload MUST be done using a USB cable, after the first upload you can use OTA updates.
 
 If everything went correctly you should see the board as online in Home Assistant. Next go to settings and add the board as a device. The board will be automatically added to the auto generated dashboard and you can now control the LED strip and see the sensor values.
+
+# Usage
+## Data visualization
+TODO
+## Logs
+TODO
+## Telegram Bot
+TODO
