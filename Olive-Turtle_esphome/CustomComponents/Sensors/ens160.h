@@ -42,7 +42,7 @@ public:
 	Sensor *hum_sensor = new Sensor();
 
 	// constructor
-	ENS160Sensor() : PollingComponent(60000) {}
+	ENS160Sensor() : PollingComponent(10000) {} // 60s
 
 	float get_setup_priority() const override { 
 		return esphome::setup_priority::BUS;
@@ -50,7 +50,6 @@ public:
 
 	void setup() override {
 		ESP_LOGD("ENS160", "Setting up ENS160");
-		Wire.begin();
 
 		if (aht20.begin() == false)  {
 			ESP_LOGW("ENS-AHT20", "AHT20 not detected. Please check wiring.");
@@ -91,6 +90,8 @@ public:
 			status_sensor->publish_state(myENS.getFlags());
 			temp_sensor->publish_state(aht20GetTemperature());
 			hum_sensor->publish_state(aht20GetHumidity());
+		} else {
+			ESP_LOGW("ENS160", "No data available");
 		}
 	}
 	
