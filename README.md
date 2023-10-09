@@ -1,5 +1,7 @@
 - [1. Olive-Turtle](#1-olive-turtle)
 - [2. Final Result](#2-final-result)
+	- [2.1. Dashboard](#21-dashboard)
+	- [2.2. Debug Dashboard](#22-debug-dashboard)
 - [3. Required components and software](#3-required-components-and-software)
 	- [3.1. Home Assistant](#31-home-assistant)
 		- [3.1.1. Hardware](#311-hardware)
@@ -14,6 +16,12 @@
 		- [4.2.2. Software](#422-software)
 			- [4.2.2.1. Test Software](#4221-test-software)
 			- [4.2.2.2. ESPHome integration](#4222-esphome-integration)
+- [5. Telegram Bot](#5-telegram-bot)
+	- [5.1. Bot Configuration](#51-bot-configuration)
+	- [5.2. Commands](#52-commands)
+- [Future Development](#future-development)
+	- [Hardware Side](#hardware-side)
+	- [Software Side](#software-side)
 
 # 1. Olive-Turtle
 
@@ -26,7 +34,18 @@ The project aims to implement a board capable of controlling a 12V LED strip wit
 Everything is controlled using Home Assistant, an open source software written in Python and released in 2013 under the Apache 2.0 license. It is a complete home automation system that can integreate with most existing IoT and home automation devices (mainly thanks to the huge user base) and be used to control and automate all the devices in your home, including custom made microcontroller boards.
 
 # 2. Final Result
-TODO
+
+## 2.1. Dashboard
+![Olive Turtle Dashboard](images/dashboard.png "Home Assistant dashboard with the Olive Turtle board")
+> Note that due to technical problems with the sensors air quality values are not available in this screenshot.
+
+The resulting dashboard integrates the existing "smart lights" (Ikea TRADFRI) and the Olive Turtle board, which is used to control the LED strip and acquire environmental data.
+
+The board allows for a quick glance at the system status or a more detailed view of the data, and it can be used to control the LED strip brightness.
+
+## 2.2. Debug Dashboard
+![Olive Turtle Debug Dashboard](images/debug_dashboard.png "Home Assistant debug dashboard with the Olive Turtle board")
+In the debug section you can see raw data from the board along with some debug parameters like WiFi signal strength.
 
 # 3. Required components and software
 
@@ -130,3 +149,69 @@ Once you have filled in all the required information, you can compile and upload
 > Note that the first upload MUST be done using a USB cable, after the first upload you can use OTA updates.
 
 If everything went correctly you should see the board as online in Home Assistant. Next go to settings and add the board as a device. The board will be automatically added to the auto generated dashboard and you can now control the LED strip and see the sensor values.
+
+# 5. Telegram Bot
+As a proof of concept I tried implementing a Telegram Bot ([@OliveTurtleBot](https://t.me/OliveTurtleBot)) using the Telegram extension of Home Assistant.
+
+The bot is very simple, it allows you to activate two predefined scenes, __away__ and __nightpc__, but can also be used to get notifications from other Home Assitant automations.
+
+Unfortunately the Telegram extension does not have a UI setup process, so you have to manually edit the configuration file, but it is not very complicated and is explained in the [official documentation](https://www.home-assistant.io/integrations/telegram).
+
+## 5.1. Bot Configuration
+The first step is to edit `/config/configuration.yaml` and add the following lines while replacing the placeholders (elements between [[  ]] ) with your data:
+```yaml
+# Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: "[[ API KEY ]]"
+    allowed_chat_ids:
+      - [[ CHAT ID ]]
+
+# Notifier
+notify:
+  - platform: telegram
+    name: "[[ NAME ]]" # This can be anything you want, will be used internally when calling in automations
+    chat_id: [[ CHAT ID]]
+```
+
+By adding this to configuration we set up two things:
+
+1. We enable the Telegram Bot extension and configure it to use polling (instead of webhooks) and we specify the API key (provided by [@BotFather](https://t.me/BotFather)) and the chat ID (if you don't know your chat id, use [@getidsbot](https://t.me/getidsbot)).
+2. We set up a notify action that we can use in our automations. This will allow us to send messages from the bot to a specific user (as per telegram rules, the user MUST have started the bot first).
+
+After this we need to reload Home Assistant YAML, we can do so from the YAML tab by pressing restart and quick restart.
+
+To test notifications you can use the developer tools in Home Assistant, go to the services tab and select `notify.[[ NAME ]]` from the dropdown menu, then fill in the message and click on call service. You should receive a message from the bot.
+
+Now the bot is able to send messages to the user but it ignores everything received from the user.
+
+## 5.2. Commands
+The bot is able to receive commands from the user, but it needs to know what to do with them. To do this we need to add a new automation.
+
+For the sake of this documentation, we will only implement the __ping__ command since th implementation is the same for all the other commands.
+
+Despite what the [official documentation](https://www.home-assistant.io/integrations/telegram_bot/#event-triggering) says, it's easier to configure this from the UI rather than from the automation file.
+To do so, go to settings and then to automations, click on the + button, create new automation and select the following options:
+- As trigger select a manual trigger
+  - insert `telegram_command` as event type
+  - insert `command: /ping` as event data
+- As action select call service
+  - select `Notifications: Send a notification with [[name]]`
+  - as message write `pong`
+
+Click save in the bottom right corner and give it a name, once this is done you can test the command by sending `/ping` to the bot.
+
+If you want the bot to suggest available commands you can manually set them using [@BotFather](https://t.me/BotFather).
+
+To make a command that activates a scene you just have to add a second action in your automation and select scene as you can see in the following image:
+![Olive Turtle Telegram Automation](images/telegram_automation.png "Automation for the Telegram Bot")
+
+# Future Development
+## Hardware Side
+- [ ] Fix Air quality sensor or identify valid alternative
+- [ ] Prototype and print first PCB version
+## Software Side
+- [ ] As soon as https://github.com/esphome/esphome/pull/4243 is merged, remove custom ENS160 implementation and use library instead
+  - Removing the custom implementation would also allow to upload directly from Home Assistant (with a more powerful server) therefore removing entirely the need for ESPHome CLI
+- [ ] Implement InfluxDB as long term sensor data storage
+- [ ] Implement Grafana as a dashboard alternative
