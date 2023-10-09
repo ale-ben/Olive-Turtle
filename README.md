@@ -1,5 +1,7 @@
 - [1. Olive-Turtle](#1-olive-turtle)
 - [2. Final Result](#2-final-result)
+	- [2.1. Dashboard](#21-dashboard)
+	- [2.2. Debug Dashboard](#22-debug-dashboard)
 - [3. Required components and software](#3-required-components-and-software)
 	- [3.1. Home Assistant](#31-home-assistant)
 		- [3.1.1. Hardware](#311-hardware)
@@ -30,12 +32,18 @@ The project aims to implement a board capable of controlling a 12V LED strip wit
 Everything is controlled using Home Assistant, an open source software written in Python and released in 2013 under the Apache 2.0 license. It is a complete home automation system that can integreate with most existing IoT and home automation devices (mainly thanks to the huge user base) and be used to control and automate all the devices in your home, including custom made microcontroller boards.
 
 # 2. Final Result
+
+## 2.1. Dashboard
 ![Olive Turtle Dashboard](images/dashboard.png "Home Assistant dashboard with the Olive Turtle board")
 > Note that due to technical problems with the sensors air quality values are not available in this screenshot.
 
 The resulting dashboard integrates the existing "smart lights" (Ikea TRADFRI) and the Olive Turtle board, which is used to control the LED strip and acquire environmental data.
 
 The board allows for a quick glance at the system status or a more detailed view of the data, and it can be used to control the LED strip brightness.
+
+## 2.2. Debug Dashboard
+![Olive Turtle Debug Dashboard](images/debug_dashboard.png "Home Assistant debug dashboard with the Olive Turtle board")
+In the debug section you can see raw data from the board along with some debug parameters like WiFi signal strength.
 
 # 3. Required components and software
 
