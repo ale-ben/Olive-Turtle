@@ -19,9 +19,9 @@
 - [5. Telegram Bot](#5-telegram-bot)
 	- [5.1. Bot Configuration](#51-bot-configuration)
 	- [5.2. Commands](#52-commands)
-- [Future Development](#future-development)
-	- [Hardware Side](#hardware-side)
-	- [Software Side](#software-side)
+- [6. Future Development](#6-future-development)
+	- [6.1. Hardware Side](#61-hardware-side)
+	- [6.2. Software Side](#62-software-side)
 
 # 1. Olive-Turtle
 
@@ -206,11 +206,11 @@ If you want the bot to suggest available commands you can manually set them usin
 To make a command that activates a scene you just have to add a second action in your automation and select scene as you can see in the following image:
 ![Olive Turtle Telegram Automation](images/telegram_automation.png "Automation for the Telegram Bot")
 
-# Future Development
-## Hardware Side
+# 6. Future Development
+## 6.1. Hardware Side
 - [ ] https://github.com/ale-ben/Olive-Turtle/issues/4 Fix Air quality sensor or identify valid alternative
 - [ ] Prototype and print first PCB version
-## Software Side
+## 6.2. Software Side
 - [ ] As soon as https://github.com/esphome/esphome/pull/4243 is merged, remove custom ENS160 implementation and use library instead
   - Removing the custom implementation would also allow to upload directly from Home Assistant (with a more powerful server) therefore removing entirely the need for ESPHome CLI
 - [ ] Implement InfluxDB as long term sensor data storage
