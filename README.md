@@ -14,10 +14,10 @@
 		- [4.2.2. Software](#422-software)
 			- [4.2.2.1. Test Software](#4221-test-software)
 			- [4.2.2.2. ESPHome integration](#4222-esphome-integration)
-- [Usage](#usage)
-	- [Data visualization](#data-visualization)
-	- [Logs](#logs)
-	- [Telegram Bot](#telegram-bot)
+- [5. Usage](#5-usage)
+	- [5.1. Data visualization](#51-data-visualization)
+	- [5.2. Logs](#52-logs)
+	- [5.3. Telegram Bot](#53-telegram-bot)
 
 # 1. Olive-Turtle
 
@@ -30,7 +30,12 @@ The project aims to implement a board capable of controlling a 12V LED strip wit
 Everything is controlled using Home Assistant, an open source software written in Python and released in 2013 under the Apache 2.0 license. It is a complete home automation system that can integreate with most existing IoT and home automation devices (mainly thanks to the huge user base) and be used to control and automate all the devices in your home, including custom made microcontroller boards.
 
 # 2. Final Result
-TODO
+![Olive Turtle Dashboard](images/dashboard.png "Home Assistant dashboard with the Olive Turtle board")
+> Note that due to technical problems with the sensors air quality values are not available in this screenshot.
+
+The resulting dashboard integrates the existing "smart lights" (Ikea TRADFRI) and the Olive Turtle board, which is used to control the LED strip and acquire environmental data.
+
+The board allows for a quick glance at the system status or a more detailed view of the data, and it can be used to control the LED strip brightness.
 
 # 3. Required components and software
 
@@ -135,10 +140,10 @@ Once you have filled in all the required information, you can compile and upload
 
 If everything went correctly you should see the board as online in Home Assistant. Next go to settings and add the board as a device. The board will be automatically added to the auto generated dashboard and you can now control the LED strip and see the sensor values.
 
-# Usage
-## Data visualization
+# 5. Usage
+## 5.1. Data visualization
 TODO
-## Logs
+## 5.2. Logs
 TODO
-## Telegram Bot
+## 5.3. Telegram Bot
 TODO
