@@ -208,7 +208,7 @@ To make a command that activates a scene you just have to add a second action in
 
 # Future Development
 ## Hardware Side
-- [ ] Fix Air quality sensor or identify valid alternative
+- [ ] https://github.com/ale-ben/Olive-Turtle/issues/4 Fix Air quality sensor or identify valid alternative
 - [ ] Prototype and print first PCB version
 ## Software Side
 - [ ] As soon as https://github.com/esphome/esphome/pull/4243 is merged, remove custom ENS160 implementation and use library instead
