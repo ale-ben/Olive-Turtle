@@ -88,11 +88,12 @@ public:
 			tvoc_sensor->publish_state(myENS.getTVOC());
 			eco2_sensor->publish_state(myENS.getECO2());
 			status_sensor->publish_state(myENS.getFlags());
-			temp_sensor->publish_state(aht20GetTemperature());
-			hum_sensor->publish_state(aht20GetHumidity());
 		} else {
 			ESP_LOGW("ENS160", "No data available");
 		}
+
+		temp_sensor->publish_state(aht20GetTemperature());
+		hum_sensor->publish_state(aht20GetHumidity());
 	}
 	
 };
