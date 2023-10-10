@@ -213,5 +213,5 @@ To make a command that activates a scene you just have to add a second action in
 ## 6.2. Software Side
 - [ ] As soon as https://github.com/esphome/esphome/pull/4243 is merged, remove custom ENS160 implementation and use library instead
   - Removing the custom implementation would also allow to upload directly from Home Assistant (with a more powerful server) therefore removing entirely the need for ESPHome CLI
-- [ ] Implement InfluxDB as long term sensor data storage
+- [X] Implement InfluxDB as long term sensor data storage
 - [ ] Implement Grafana as a dashboard alternative
